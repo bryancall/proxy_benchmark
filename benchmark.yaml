@@ -1,9 +1,9 @@
 # benchmark.yaml - Main configuration file
 
 hosts:
-  client: eris      # Runs h2load
-  proxy: zeus       # Runs proxy servers
-  origin: eris      # Runs origin nginx backend
+  client: localhost    # Runs h2load (on zeus for local testing)
+  proxy: localhost     # Runs proxy servers (zeus)
+  origin: localhost    # Runs origin nginx backend (on zeus for local testing)
 
 ports:
   origin: 9000
@@ -42,8 +42,8 @@ scenarios:
   - http2-tls-uncached
 
 proxies:
-  - ats
   - nginx
-  - envoy
-  - haproxy
+  # - ats      # Needs config setup
+  # - envoy    # Not installed
+  # - haproxy  # Not installed
 
