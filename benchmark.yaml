@@ -1,9 +1,9 @@
 # benchmark.yaml - Main configuration file
 
 hosts:
-  client: localhost    # Runs h2load
-  proxy: localhost     # Runs proxy servers
-  origin: localhost    # Runs origin nginx backend
+  client: eris      # Runs h2load
+  proxy: zeus       # Runs proxy servers
+  origin: eris      # Runs origin nginx backend
 
 ports:
   origin: 9000
