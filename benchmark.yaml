@@ -1,0 +1,49 @@
+# benchmark.yaml - Main configuration file
+
+hosts:
+  client: eris    # Runs h2load
+  proxy: zeus     # Runs proxy servers
+  origin: eris    # Runs origin nginx backend
+
+ports:
+  origin: 9000
+  proxies:
+    ats:
+      http: 8080
+      https: 8443
+    nginx:
+      http: 8081
+      https: 8444
+    envoy:
+      http: 8082
+      https: 8445
+    haproxy:
+      http: 8083
+      https: 8446
+
+benchmark:
+  clients: 1000
+  threads: 12
+  duration: 10        # seconds
+
+response:
+  size_kb: 1          # default: 1KB
+
+cache:
+  warmup_duration: 5  # seconds
+  warmup_urls: 100    # unique URLs to cache
+
+scenarios:
+  - http1-plain-cached
+  - http1-plain-uncached
+  - http1-tls-cached
+  - http1-tls-uncached
+  - http2-tls-cached
+  - http2-tls-uncached
+
+proxies:
+  - ats
+  - nginx
+  - envoy
+  - haproxy
+

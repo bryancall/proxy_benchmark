@@ -1,0 +1,43 @@
+# ATS records.yaml - Configuration for benchmarking
+# Replace {{ORIGIN_HOST}} and {{ORIGIN_PORT}} with actual values
+
+# Proxy settings
+proxy.config.proxy_name: STRING benchmark-ats
+proxy.config.admin.user_id: STRING nobody
+
+# Single worker for fair comparison
+proxy.config.exec_thread.autoconfig: INT 0
+proxy.config.exec_thread.autoconfig.scale: FLOAT 1.0
+proxy.config.exec_thread.limit: INT 1
+
+# HTTP settings
+proxy.config.http.server_ports: STRING 8080 8443:ssl
+
+# Keep-alive settings
+proxy.config.http.keep_alive_enabled_in: INT 1
+proxy.config.http.keep_alive_enabled_out: INT 1
+proxy.config.http.keep_alive_no_activity_timeout_in: INT 120
+proxy.config.http.keep_alive_no_activity_timeout_out: INT 120
+
+# Cache settings - enable caching
+proxy.config.http.cache.http: INT 1
+proxy.config.http.cache.required_headers: INT 0
+proxy.config.http.cache.ignore_client_no_cache: INT 0
+proxy.config.http.cache.ignore_server_no_cache: INT 0
+
+# RAM cache
+proxy.config.cache.ram_cache.size: INT 268435456
+proxy.config.cache.ram_cache_cutoff: INT 16777216
+
+# Logging - disable for benchmarking
+proxy.config.log.logging_enabled: INT 0
+proxy.config.diags.debug.enabled: INT 0
+
+# SSL/TLS settings
+proxy.config.ssl.server.cert.path: STRING {{CERT_DIR}}
+proxy.config.ssl.server.private_key.path: STRING {{CERT_DIR}}
+
+# Connection settings
+proxy.config.net.connections_throttle: INT 30000
+proxy.config.http.server_session_sharing.pool: STRING global
+

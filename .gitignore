@@ -1,0 +1,33 @@
+# Benchmark results (may be large)
+results/
+
+# Generated certificates
+certs/*.pem
+certs/*.key
+certs/*.crt
+
+# Generated content
+backend/content/cacheable/
+backend/content/uncacheable/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Editor
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.log
+
