@@ -1,0 +1,31 @@
+records:
+  exec_thread:
+    autoconfig:
+      enabled: 0
+    limit: 1
+  http:
+    server_ports: 8090 8493:ssl
+    cache:
+      http: 1
+      required_headers: 0
+    keep_alive_enabled_in: 1
+    keep_alive_enabled_out: 1
+    keep_alive_no_activity_timeout_in: 120
+    keep_alive_no_activity_timeout_out: 120
+  cache:
+    ram_cache:
+      size: 268435456
+    ram_cache_cutoff: 16777216
+  diags:
+    debug:
+      enabled: 0
+  log:
+    logging_enabled: 0
+  ssl:
+    server:
+      cert:
+        path: etc/trafficserver
+      private_key:
+        path: etc/trafficserver
+  net:
+    connections_throttle: 30000
