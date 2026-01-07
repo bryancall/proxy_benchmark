@@ -85,15 +85,8 @@ run_single_benchmark() {
         endpoint="uncacheable"
     fi
     
-    # TLS options
+    # Note: h2load doesn't verify TLS certs by default, which is fine for benchmarking
     local tls_opts=""
-    if [[ "$scheme" == "https" ]]; then
-        if [ -f "${CERT_DIR}/ca.crt" ]; then
-            tls_opts="--ca-cert=${CERT_DIR}/ca.crt"
-        else
-            tls_opts="--insecure"
-        fi
-    fi
     
     # Generate URL list for cached scenarios (multiple URLs)
     local url_file=$(mktemp)
@@ -136,16 +129,19 @@ parse_h2load_output() {
     local proxy=$2
     local scenario=$3
     
-    # Extract metrics using grep/awk
-    local req_sec=$(grep "requests/sec" "$file" | head -1 | awk '{print $1}' || echo "0")
-    local total_reqs=$(grep "requests:" "$file" | head -1 | awk '{print $2}' || echo "0")
+    # Extract req/s from "finished in X, Y req/s, Z" line
+    local req_sec=$(grep "req/s," "$file" | head -1 | awk -F',' '{print $2}' | awk '{print $1}' || echo "0")
     
-    # Extract timing stats (time for request)
-    local timing_line=$(grep -A1 "time for request:" "$file" | tail -1 || echo "")
-    local latency_min=$(echo "$timing_line" | awk '{print $1}' | sed 's/us$//' | sed 's/ms$//' || echo "0")
-    local latency_max=$(echo "$timing_line" | awk '{print $2}' | sed 's/us$//' | sed 's/ms$//' || echo "0")
-    local latency_mean=$(echo "$timing_line" | awk '{print $3}' | sed 's/us$//' | sed 's/ms$//' || echo "0")
-    local latency_sd=$(echo "$timing_line" | awk '{print $4}' | sed 's/us$//' | sed 's/ms$//' || echo "0")
+    # Extract total requests from "requests: N total" line
+    local total_reqs=$(grep "^requests:" "$file" | head -1 | awk '{print $2}' || echo "0")
+    
+    # Extract timing stats from "time for request:" line
+    # Format: "time for request:      196us      2.08ms       955us        25us    97.26%"
+    local timing_line=$(grep "time for request:" "$file" | head -1 || echo "")
+    local latency_min=$(echo "$timing_line" | awk '{print $4}' || echo "0")
+    local latency_max=$(echo "$timing_line" | awk '{print $5}' || echo "0")
+    local latency_mean=$(echo "$timing_line" | awk '{print $6}' || echo "0")
+    local latency_sd=$(echo "$timing_line" | awk '{print $7}' || echo "0")
     
     cat << EOF
 {

@@ -66,16 +66,7 @@ H2LOAD_CMD+=" -c 100"
 H2LOAD_CMD+=" -t 4"
 H2LOAD_CMD+=" ${H2LOAD_OPTS}"
 
-# Add TLS options if needed
-if [[ "$SCHEME" == "https" ]]; then
-    if [ -f "${CERT_DIR}/ca.crt" ]; then
-        # Use our CA cert for verification
-        H2LOAD_CMD+=" --ca-cert=${CERT_DIR}/ca.crt"
-    else
-        # Fall back to insecure if no CA cert
-        H2LOAD_CMD+=" --insecure"
-    fi
-fi
+# Note: h2load doesn't verify TLS certs by default, which is fine for benchmarking
 
 # Add URL file
 H2LOAD_CMD+=" -i ${URL_FILE}"
